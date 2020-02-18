@@ -1,0 +1,481 @@
+{
+	"info": {
+		"_postman_id": "2b5a5a8a-63f4-4554-9513-6e5d8e573e92",
+		"name": "TP-biblioteca-UI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "USUARIO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nombre\" : \"Mili Pili\",\n\t\"username\" : \"mipi\",\n\t\"password\" : \"careta\",\n\t\"rol\" : \"s\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN socio",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"juanchope\",\n\t\"password\" : \"1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"admin\",\n\t\"password\" : \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGOUT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/logout",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIBROS (admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"titulo\" : \"La vida de Juan Pereyra 2\", \n\t\"cantidad\" : 7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/libros",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"libros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PRESTAMOS (socio)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"idLibro\" : \"12345\",\n\t\"cantidadDias\" : 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/prestamos",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "USUARIOS (admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/usuarios",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HOME",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/home",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PRESTAMOS (admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/prestamos",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIBROS - info libro (admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/libros/12345",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"libros",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PRESTAMOS - socio (admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/prestamos/lpsx4xp3y",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"prestamos",
+								"lpsx4xp3y"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIBROS (todos)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/libros",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"libros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PRESTAMOS (admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/prestamos/12345",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"prestamos",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "PUT",
+			"item": [
+				{
+					"name": "LIBROS - cantidad (admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cantidad\" : 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/libros/12345",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"libros",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "LIBROS (admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/libros/67890",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"libros",
+								"67890"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

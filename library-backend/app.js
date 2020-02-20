@@ -55,11 +55,12 @@ app.post('/login', async function (request, response) {
             }
             response.status(200).json("User Logged");
         } else {
+            console.log("Usuario o contraseña incorrecto!");
             response.status(404).json("Usuario o contraseña incorrecto!");
         }
     } else {
+        console.log('Por favor ingrese un nombre de usuario o contraseña!');
         response.status(400).json('Por favor ingrese un nombre de usuario o contraseña!');
-
     }
 });
 
@@ -73,15 +74,19 @@ app.post('/logout', function (req, res) {
 // Registro de usuarios (socios, el admin se carga a mano en la BD)
 app.post('/usuarios',async function(req, res){
     if(!req.body.nombre){
+        console.log("Debe completar el campo nombre");
         res.status(400).json("Debe completar el campo nombre");
     }
     else if(!req.body.username){
+        console.log("Debe completar el campo username");
         res.status(400).json("Debe completar el campo username");
     }
     else if(!req.body.password){
+        console.log("Debe completar el campo password");
         res.status(400).json("Debe completar el campo password");
     }
     else if(!req.body.rol){
+        console.log("Debe completar el campo rol");
         res.status(400).json("Debe completar el campo rol");
     }
     else if(req.body.username == "admin"){
@@ -93,6 +98,7 @@ app.post('/usuarios',async function(req, res){
             var queryUsername = await query(queryUser,req.body.username);
 
             if(queryUsername.length > 0){
+                console.log("Username ya existente!");
                 res.status(400).json("Username ya existente!");
             }
             else{
@@ -102,6 +108,7 @@ app.post('/usuarios',async function(req, res){
             }
         }
         else{
+            console.log("El campo rol debe contener 's' o 'S'");
             res.status(400).json("El campo rol debe contener 's' o 'S'");
         }
     }
@@ -122,6 +129,7 @@ var auth = function(req, res, next) {
 app.get('/usuarios',auth, async function(req,res){
     var queryResult = await query(`select * from usuarios`);
     if(queryResult.length == 0){
+        console.log("No se encontraron usuarios");
         res.status(404).json("No se encontraron usuarios");
     } else{
         res.status(200).json(queryResult);
@@ -131,15 +139,19 @@ app.get('/usuarios',auth, async function(req,res){
 // POST libro : agregar un nuevo libro a la BD
 app.post('/libros',auth, async function(req, res){
     if(!req.body.titulo){
+        console.log("Debe completar el campo titulo");
         res.status(400).json("Debe completar el campo titulo");
     }
     else if(!req.body.cantidad){
+        console.log("Debe completar el campo cantidad");
         res.status(400).json("Debe completar el campo cantidad");
     }
     else if(req.body.cantidad <= 0){
+        console.log("Debe ingresar una cantidad mayor a cero");
         res.status(400).json("Debe ingresar una cantidad mayor a cero");
     }
     else if(!Number.isInteger(req.body.cantidad)){
+        console.log("Debe ingresar un entero");
         res.status(400).json("Debe ingresar un entero");
     }   
     else{
@@ -152,12 +164,15 @@ app.post('/libros',auth, async function(req, res){
 // PUT libro : actualizo la cantidad de ejemplares de un libro
 app.put('/libros/:idLibro',auth, async function(req,res){
     if(req.body.cantidad == null){
+        console.log("Debe completarse cantidad");
         res.status(400).json("Debe completarse cantidad");
     } 
     else if(req.body.cantidad < 0){
+        console.log("La cantidad debe ser mayor a cero");
         res.status(400).json("La cantidad debe ser mayor a cero");
     }
     else if(!Number.isInteger(req.body.cantidad)){
+        console.log("La cantidad debe ser un numero entero");
         res.status(400).json("La cantidad debe ser un numero entero");
     }
     else{
@@ -165,12 +180,14 @@ app.put('/libros/:idLibro',auth, async function(req,res){
         var queryResultExisteLibro = await query(queryExisteLibro, req.params.idLibro);
         
         if (queryResultExisteLibro.length <= 0){
+            console.log("Libro no encontrado");
             res.status(404).json("Libro no encontrado");
         } 
         else {
             const queryCantPrestada = `select count(*) as cant_prestada from prestamos where id_libro = (?)`;
             var queryResultCantPrestada = await query(queryCantPrestada, req.params.idLibro);
             if (queryResultCantPrestada[0].cant_prestada > req.body.cantidad){
+                console.log("La cantidad a ingresar debe ser mayor a la cantidad prestada");
                 res.status(400).json("La cantidad a ingresar debe ser mayor a la cantidad prestada");
             }
             else{
@@ -188,6 +205,7 @@ app.delete('/libros/:idLibro',auth, async function(req, res){
     var queryResultLibros = await query(queryLibros, req.params.idLibro);
 
     if(queryResultLibros.length <= 0){
+        console.log("Libro no encontrado");
         res.status(404).json("Libro no encontrado");
     }
     else{
@@ -195,6 +213,7 @@ app.delete('/libros/:idLibro',auth, async function(req, res){
         var queryResultPrestamos= await query(queryPrestamos, req.params.idLibro);
 
         if(queryResultPrestamos.length > 0){
+            console.log("El libro tiene ejemplares prestados");
             res.status(400).json("El libro tiene ejemplares prestados");
         }
         else{
@@ -210,7 +229,8 @@ app.get('/libros/:idLibro',auth, async function(req,res){
     const queryStr = `select cantidad from libros where id_libro = (?)`;
     var queryResult = await query(queryStr,req.params.idLibro);
     if (queryResult.length <= 0){
-      res.status(404).json("Libro no encontrado");
+        console.log("Libro no encontrado");
+        res.status(404).json("Libro no encontrado");
     } 
     else {
         const queryCantPrestada = `select count(*) as cant_prestada from prestamos where id_libro = (?)`;
@@ -226,12 +246,14 @@ app.get('/prestamos/:idSocio',auth, async function(req, res){
     var queryidSocio = await query(querySocio,req.params.idSocio);
 
     if(queryidSocio.length<=0){
+        console.log("Socio no encontrado");
         res.status(404).json("Socio no encontrado");
     }
     else{
         const queryPrestamos = `select * from prestamos where id_socio = (?)`;
         var queryPrestamosSocios = await query(queryPrestamos,req.params.idSocio);
         if(queryPrestamosSocios.length <= 0){
+            console.log("No se encontraron libros prestado al socio");
             res.status(404).json("No se encontraron libros prestado al socio");
         }
         else{
@@ -246,6 +268,7 @@ app.delete('/prestamos/:idPrestamo',auth, async function(req, res){
     var queryidPrestamos = await query(queryPrestamos, req.params.idPrestamo);
 
     if(queryidPrestamos.length <= 0){
+        console.log("Prestamo no encontrado");
         res.status(404).json("Prestamo no encontrado");
     }
     else{
@@ -263,6 +286,7 @@ app.delete('/prestamos/:idPrestamo',auth, async function(req, res){
 app.get('/libros', async function(req,res){
     var queryResult = await query(`select * from libros`);
     if (queryResult.length == 0){
+        console.log("No hay libros disponibles");
         res.status(404).json("No hay libros disponibles");
     } else{
         res.status(200).json(queryResult);
@@ -280,6 +304,7 @@ app.get('/prestamos', async function(req,res){
         const queryStr = `select * from prestamos where id_socio = (?)`;
         var queryResult = await query(queryStr,req.session.id_user); 
         if (queryResult.length == 0){
+            console.log("No tienes prestamos");
             res.status(404).json("No tienes prestamos");
         } else{
             res.status(200).json(queryResult);
@@ -291,6 +316,7 @@ app.get('/prestamos', async function(req,res){
                                         where prestamos.id_socio = usuarios.id && 
                                               prestamos.id_libro = libros.id_libro`);
         if (queryResult.length == 0){
+            console.log("No hay prestamos");
             res.status(404).json("No hay prestamos");
         } else{
             for(p of queryResult){
@@ -304,12 +330,15 @@ app.get('/prestamos', async function(req,res){
 // POST prestamo : agregar un prestamo
 app.post('/prestamos', async function(req, res){
     if(!req.body.idLibro){
+        console.log("Debe completar la id del libro");
         res.status(400).json("Debe completar la id del libro");
     }
     else if(!req.body.cantidadDias){
+        console.log("Debe completar la cantidad de dias de prestamo");
         res.status(400).json("Debe completar la cantidad de dias de prestamo");
     }
     else if(!Number.isInteger(req.body.cantidadDias)){
+        console.log("Cantidad de dias debe ser un numero entero");
         res.status(400).json("Cantidad de dias debe ser un numero entero");
     }
     else if(req.session.rol == "s" || req.session.rol == "S"){
@@ -327,18 +356,22 @@ app.post('/prestamos', async function(req, res){
         var queryPrestamosSocios = await query(queryPrestamos,[idSocio, fechaMiliseg]);
 
         if(queryidLibro.length<=0){
+            console.log("Libro no encontrado");
             res.status(404).json("Libro no encontrado");
         }
         else if(req.body.cantidadDias <= 0){
+            console.log("Cantidad de dias debe ser mayor a cero");
             res.status(400).json("Cantidad de dias debe ser mayor a cero");
         }
         else{
             disponibles = queryidLibro[0].cantidad - queryCantidadLibros[0].cant;
             
             if (disponibles <= 0){
+                console.log("No hay ejemplares disponibles");
                 res.status(400).json("No hay ejemplares disponibles");
             }
             else if(queryPrestamosSocios.length > 0){
+                console.log("El socio tiene prestamos vencidos");
                 res.status(400).json("El socio tiene prestamos vencidos");
             }
             else{
@@ -350,6 +383,7 @@ app.post('/prestamos', async function(req, res){
         }
     }
     else{
+        console.log("El adminstrador no puede pedir prestamo");
         res.status(401).json("El adminstrador no puede pedir prestamo");
     }
 })
@@ -359,6 +393,7 @@ app.get('/prestamos_vencidos', auth, async function (req, res) {
     const queryPrestamos = `select * from prestamos where fecha_vto < ?`;
     var queryPrestamosGeneral = await query(queryPrestamos, [fechaMiliseg]);
     if (queryPrestamosGeneral.length <= 0) {
+        console.log("No hay prestamos vencidos");
         res.status(400).json("No hay prestamos vencidos");
     } else {
         res.status(200).json(queryPrestamosGeneral);

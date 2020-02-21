@@ -21,9 +21,9 @@ app.use(cors({
 
 var con = mysql.createConnection({
     host: "localhost",
-    user: "emi",
-    password: "emiliano311",
-    database: "BIBLIOTECA"
+    user: "lab4",
+    password: "laboratorio4",
+    database: "library"
 });
 con.connect(function (err) {
     if (err) throw err;
@@ -301,7 +301,8 @@ app.get('/libros', async function(req,res){
 // y si eres admin lista todos lo prestamos de la biblioteca
 app.get('/prestamos', async function(req,res){
     if(req.session.rol == "s" || req.session.rol == "S"){
-        const queryStr = `select * from prestamos where id_socio = (?)`;
+        const queryStr = `select * from prestamos 
+                            join libros where id_socio = (?) and prestamos.id_libro = libros.id_libro`;
         var queryResult = await query(queryStr,req.session.id_user); 
         if (queryResult.length == 0){
             console.log("No tienes prestamos");
@@ -311,7 +312,7 @@ app.get('/prestamos', async function(req,res){
         }
     }
     else{
-        var queryResult = await query(`select id_prestamo, libros.id_libro, prestamos.id_socio, libros.titulo, usuarios.nombre, fecha_vto
+        var queryResult = await query(`select id_prestamo, libros.id_libro, prestamos.id_socio, libros.titulo, usuarios.nombre as nombre_socio, fecha_vto
                                         from prestamos join usuarios join libros 
                                         where prestamos.id_socio = usuarios.id && 
                                               prestamos.id_libro = libros.id_libro`);

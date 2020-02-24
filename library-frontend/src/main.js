@@ -20,7 +20,9 @@ Vue.config.productionTip = false
 axios.defaults.withCredentials = true
 
 import NavBar from './components/NavBar.vue'
-Vue.component('NavBar', NavBar)
+Vue.component('NavBar', NavBar);
+import Footer from './components/Footer.vue'
+Vue.component('Footer', Footer);
 
 import TabNav from './components/TabNav.vue'
 Vue.component('TabNav', TabNav)

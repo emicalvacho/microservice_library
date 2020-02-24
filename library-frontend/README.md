@@ -1,4 +1,4 @@
-# newlibrary
+# library-frontend
 
 ## Project setup
 ```

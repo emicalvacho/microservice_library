@@ -5,6 +5,21 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: () => import('../views/SingUp.vue')
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('../views/UserHome.vue')
+  },
+  {
     path: '/books',
     name: 'books',
     component: () => import('../views/AdminBooks.vue')

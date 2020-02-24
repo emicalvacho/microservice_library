@@ -1,71 +1,198 @@
 <template>
+  <div>
     <v-containter>
-        <v-layout wrap ma-5 justify-center align-center style="height: 90%">
-            <v-flex xs8 md6>
-                <v-card elevation="12">
+      <v-snackbar v-model="snackbar" :timeout="timeout" top :color="colorSnack">
+        {{ messageResponse }}
+        <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
+      </v-snackbar>
+      <div class="limiter imagen-login">
+        <div class="container-login100">
+          <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" p-l-55>
+            <form class="login100-form validate-form">
+              <span class="login100-form-title p-b-30">Iniciar sesión</span>
 
-                    <v-toolbar color="blue darken-1 white--text">
-                        <v-spacer></v-spacer>
-                        <v-toolbar-title>
-                            Login
-                        </v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-                    
-                    <v-card-text>
-                        <v-text-field v-model="username" label="Username" color="blue darken-1"/>
-                        <v-text-field v-model="password" type="password" label="Password" color="blue darken-1"/>
-                    </v-card-text>
+              <v-text-field
+                box
+                full-width
+                single-line
+                label="Username"
+                color="blue"
+                prepend-inner-icon="mdi-account-outline"
+                mb-0
+                v-model="username"
+                :rules="usernameRules"
+                @keyup.enter="auth"
+                required
+              ></v-text-field>
 
-                    <v-card-actions>
-                        
-                        <p class="ma-1">No account?<v-btn color="blue" class="subheading mx-3 white--text" to="/signup">Create account</v-btn></p>
-                        <v-spacer></v-spacer>
-                        <v-btn @click="auth" class="pl-10 pr-10" outlined large color="blue darken-1 white--text">Sign in</v-btn>
-                    </v-card-actions>
+              <v-text-field
+                :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                :type="show1 ? 'text' : 'password'"
+                box
+                full-width
+                single-line
+                label="Contraseña"
+                color="blue"
+                prepend-inner-icon="mdi-lock-outline"
+                @click:append="show1 = !show1"
+                v-model="password"
+                :rules="passwordRules"
+                @keyup.enter="auth"
+                required
+              ></v-text-field>
 
-                </v-card>
+              <div class="text-center m-t-20">
+                <v-btn rounded color="success" @click="auth" class="login100-form-btn" dark>Iniciar</v-btn>
+              </div>
 
-            </v-flex>
-        </v-layout>
+              <div class="flex-col-c p-t-50">
+                <p class="ma-1">
+                  ¿Aún no tienes una cuenta?
+                  <v-btn
+                    rounded
+                    color="#326fc4"
+                    class="subheading mx-3 white--text"
+                    to="/signup"
+                  >Crear cuenta</v-btn>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </v-containter>
-
+  </div>
 </template>
 
 <script>
-
+import { mapActions, mapState, mapMutations } from "vuex";
 export default {
-    data(){
-        return{
-            username: '',
-            password: '',
-            myColor: 'white',
-            borderActive: 'none',
-            msgError: false
-        }
+  data() {
+    return {
+      username: "",
+      password: "",
+      myColor: "white",
+      borderActive: "none",
+      timeout: 2000,
+      colorSnack: "",
+      snackbar: false,
+      messageResponse: "",
+      show1: false
+    };
+  },
+  methods: {
+    auth() {
+      this.$axios
+        .post("http://localhost:8080/login", {
+          username: this.username,
+          password: this.password
+        })
+        .then(data => {
+          console.log(data);
+          this.setName(this.username);
+          if (this.username == "admin") {
+            this.$router.push("home_admin");
+          } else {
+            this.$router.push("home");
+          }
+        })
+        .catch(e => {
+          this.messageResponse = e.response.data;
+          this.snackbar = true;
+          this.colorSnack = "error";
+          console.log("Incorrect credentials");
+        });
     },
-    methods: {
-        auth(){
-            //e.preventDefault();
-            this.$axios.post('http://localhost:8080/login', {
-                username: this.username,
-                password: this.password
-            })
-            .then(data => {
-                console.log(data);
-                this.$router.push('home');
-                }
-            )
-            .catch(() => {
-                this.msgError = true;
-
-                console.log("Incorrect credentials");
-            })
-        },
-
-    }
-}
+    ...mapActions(["getName"]),
+    ...mapMutations(["setName"])
+  },
+  computed: {
+    ...mapState(["name"])
+  }
+};
 </script>
 
-<style>
+<style scope>
+@import "../assets/css/util.css";
+
+/* Utilidades*/
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666666;
+  margin: 0px;
+}
+
+/* Login */
+.limiter {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container-login100 {
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.wrap-login100 {
+  width: 500px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Form */
+.login100-form {
+  width: 100%;
+}
+.login100-form-title {
+  display: block;
+  font-size: 39px;
+  color: #333333;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .wrap-login100 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Background */
+.imagen-login {
+  background-image: linear-gradient(
+      rgba(50, 111, 196, 0.8),
+      rgba(50, 111, 196, 0.8)
+    ),
+    url("../assets/images/background-login.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
 </style>
+

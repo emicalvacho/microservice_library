@@ -1,87 +1,214 @@
 <template>
-    <v-containter>
-        <v-layout wrap ma-5 justify-center align-center>
-            <v-flex xs8 md6>
-                <v-card elevation="12">
-
-                    <v-toolbar color="blue darken-1 white--text">
-                        <v-spacer></v-spacer>
-                        <v-toolbar-title>
-                            Sign Up
-                        </v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-                    
-                    <v-form ref="form">
-                        <v-card-text>
-                            <v-text-field class="mt-1 pt-4" label="Name" color="blue darken-1" :rules="emptyField"/>
-                            <v-text-field class="mt-1 pt-4" label="Username" color="blue darken-1" :rules="emptyField"/>
-                            <v-text-field class="mt-1 pt-4" type="password" label="Password" color="blue darken-1" :rules="emptyField"/>
-                            <v-text-field class="mt-1 pt-4" type="password" label="Confirm password" color="blue darken-1" :rules="emptyField"/>
-                            <v-select class="mt-1 pt-4" color="blue darken-1" :items="items" label="Rol" dense :rules="emptyField"></v-select>
-                        </v-card-text>
-                    </v-form>
-                    
-
-                    <v-card-actions>
-                        <p class="ma-1"><v-btn color="blue" class="subheading mx-3 white--text" to="/login">Login</v-btn></p>
-                        <v-spacer></v-spacer>
-                        <v-btn @click="sendUser" class="pl-10 pr-10 mr-2" outlined large color="blue darken-1 white--text">Create account</v-btn>
-                    </v-card-actions>
-
-                </v-card>
-
+  <div>
+    <v-container fluid pa-0 class="contenedor">
+      <v-snackbar v-model="snackbar" :timeout="timeout" top :color="colorSnack">
+        {{ messageResponse }}
+        <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
+      </v-snackbar>
+      <v-layout row wrap class="capa-envolvente">
+        <v-flex xs12 sm4 id="sign-in-text-wrapper">
+          <v-layout column align-center justify-center fill-height pa-3>
+            <div class="login-wrapper text-xs-center mb-3">
+              <div class="display-1 font-weight-black mb-3">Vamos a leer algo!</div>
+              <span class="subheading"></span>
+            </div>
+            <v-btn
+              rounded
+              outline
+              large
+              dark
+              ripple
+              id="sign-in"
+              @click="sendLogin"
+              class="subheading mx-3 white--text"
+            >Iniciar sesión</v-btn>
+          </v-layout>
+        </v-flex>
+        <v-flex xs12 sm8 id="sign-up-envoltorio" class="active">
+          <v-layout column align-center justify-center pa-3 mt-5>
+            <v-flex xs12 mb-3 mt-5>
+              <div class="login-wrapper text-xs-center">
+                <div class="display-1 font-weight-black">Crear cuenta</div>
+              </div>
             </v-flex>
-        </v-layout>
-    </v-containter>
-  
+
+            <v-flex xs12>
+              <v-form ref="form">
+                <v-text-field
+                  box
+                  full-width
+                  single-line
+                  label="Nombre"
+                  color="blue"
+                  prepend-inner-icon="mdi-account-box"
+                  v-model="name"
+                  :rules="nameRules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  box
+                  full-width
+                  single-line
+                  label="Username"
+                  color="blue"
+                  prepend-inner-icon="mdi-account-outline"
+                  v-model="username"
+                  :rules="usernameRules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                  :type="show1 ? 'text' : 'password'"
+                  box
+                  full-width
+                  single-line
+                  label="Contraseña"
+                  color="blue"
+                  prepend-inner-icon="mdi-lock-outline"
+                  @click:append="show1 = !show1"
+                  v-model="password"
+                  :rules="passwordRules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  :append-icon="show2 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                  :type="show2 ? 'text' : 'password'"
+                  box
+                  full-width
+                  single-line
+                  label="Confirmar contraseña"
+                  color="blue"
+                  prepend-inner-icon="mdi-lock-outline"
+                  @click:append="show2 = !show2"
+                  v-model="confirmPassword"
+                  :rules="confirmRules"
+                  required
+                ></v-text-field>
+              </v-form>
+            </v-flex>
+            <div class="mt-5">
+              <v-btn
+                rounded
+                large
+                dark
+                ripple
+                color="#326fc4"
+                id="sign-up"
+                @click="sendUser"
+                height="50"
+              >Registrarse</v-btn>
+            </div>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
-    //import axios from 'axios';
-
-    export default {
-        data() {
-            return{
-                items: ["Bibliotecario", "Socio"],
-                name: '',
-                username: '',
-                password: '',
-                rol: '',
-                output: '',
-                emptyField: [
-                    v => !!v || 'You must complete the field'
-                ]
-            };
-        },
-        methods: {
-            sendUser() {
-                if(this.$refs.form.validate()){
-                    
-                    this.$axios.post('http://localhost:8080/usuarios' , {
-                        name: this.name,
-                        username: this.username,
-                        password: this.password,
-                        rol: this.rol
-                        
-                    })
-                    .then ( () => {
-                                console.log("Hola desde send user");
-                                //data => (this.output = data.data)
-                                this.$router.push('/login');
-                            }
-                            
-                            )
-                    .catch(e => {
-                        console.log(e)
-                    })
-                }
-                
-            }
-        }
+export default {
+  data() {
+    return {
+      show1: false,
+      show2: false,
+      name: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+      messageResponse: "",
+      timeout: 2000,
+      colorSnack: "",
+      snackbar: false,
+      nameRules: [
+        v => !!v || "Completar nombre",
+        v =>
+          (v && v.length >= 3 && v.length <= 40) ||
+          "Nombre debe tener entre 3 a 40 caracteres"
+      ],
+      usernameRules: [
+        v => !!v || "Completar nombre de usuario",
+        v =>
+          (v && v.length >= 3 && v.length <= 16) ||
+          "Nombre de usuario debe tener entre 3 a 16 caracteres"
+      ],
+      passwordRules: [v => !!v || "Completar la contraseña"],
+      confirmRules: [
+        v => !!v || "Completar la confirmación de contraseña",
+        v => v === this.password || "Las contraseñas no coinciden"
+      ]
+    };
+  },
+  methods: {
+    sendUser() {
+      if (this.$refs.form.validate()) {
+        this.$axios
+          .post("http://localhost:8080/usuarios", {
+            nombre: this.name,
+            username: this.username,
+            password: this.password,
+            rol: "s"
+          })
+          .then(data => {
+            console.log(data);
+            this.messageResponse = "Usuario creado correctamente!";
+            this.snackbar = true;
+            this.colorSnack = "success";
+          })
+          .catch(e => {
+            this.messageResponse = e.response.data;
+            this.snackbar = true;
+            this.colorSnack = "error";
+            console.log("Incorrect credentials");
+          });
+      }
+    },
+    sendLogin() {
+      this.$router.push("/");
     }
-
+  }
+};
 </script>
 
-<style>
+
+<style scope>
+.contenedor {
+  background-image: linear-gradient(
+      rgba(50, 111, 196, 0.8),
+      rgba(50, 111, 196, 0.8)
+    ),
+    url("../assets/images/background-register1.jpeg");
+  background-size: 50% 100%;
+  color: white;
+}
+
+.envoltorio {
+  min-width: 50%;
+}
+
+.capa-envolvente {
+  height: 100vh;
+}
+
+.active {
+  background-color: white;
+  color: #326fc4;
+}
+
+#sign-in {
+  width: 60%;
+}
+
+#sign-up {
+  min-width: 25%;
+}
+
+.envoltorio .v-input__control > .v-input__slot {
+  background: rgba(244, 248, 247, 1);
+}
+
+.envoltorio .v-text-field.v-text-field--enclosed .v-text-field__details {
+  margin-bottom: 0px;
+  height: 0px;
+}
 </style>
+

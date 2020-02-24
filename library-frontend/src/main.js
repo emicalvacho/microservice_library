@@ -12,13 +12,18 @@ import axios from 'axios';
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios);
 
-Vue.config.productionTip = false;
-
 Vue.prototype.$axios = axios;
 axios.defaults.withCredentials = true;
 
+Vue.config.productionTip = false
+
+axios.defaults.withCredentials = true
+
 import NavBar from './components/NavBar.vue'
 Vue.component('NavBar', NavBar)
+
+import TabNav from './components/TabNav.vue'
+Vue.component('TabNav', TabNav)
 
 new Vue({
   router,

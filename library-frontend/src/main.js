@@ -18,7 +18,9 @@ Vue.prototype.$axios = axios;
 axios.defaults.withCredentials = true;
 
 import NavBar from './components/NavBar.vue'
-Vue.component('NavBar', NavBar)
+Vue.component('NavBar', NavBar);
+import Footer from './components/Footer.vue'
+Vue.component('Footer', Footer);
 
 new Vue({
   router,

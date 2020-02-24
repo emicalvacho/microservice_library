@@ -15,7 +15,7 @@ app.use(session({
 }));
 app.use(cors({
     origin: ['http://localhost:8081'],
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // enable set cookie
 }));
 
@@ -236,7 +236,7 @@ app.get('/libros/:idLibro',auth, async function(req,res){
         const queryCantPrestada = `select count(*) as cant_prestada from prestamos where id_libro = (?)`;
         var queryResultCantPrestada = await query(queryCantPrestada, req.params.idLibro);
         var disponibles = queryResult[0].cantidad - queryResultCantPrestada[0].cant_prestada;
-        res.status(200).json("Cantidad de ejemplares: " + disponibles);
+        res.status(200).json(disponibles);
     } 
 })
 
@@ -250,13 +250,20 @@ app.get('/prestamos/:idSocio',auth, async function(req, res){
         res.status(404).json("Socio no encontrado");
     }
     else{
-        const queryPrestamos = `select * from prestamos where id_socio = (?)`;
+        const queryPrestamos = `select id_prestamo, libros.id_libro, prestamos.id_socio, libros.titulo, usuarios.nombre as nombre_socio, fecha_vto
+                                    from prestamos join usuarios join libros 
+                                    where prestamos.id_libro = libros.id_libro &&
+                                          prestamos.id_socio = usuarios.id &&
+                                          prestamos.id_socio = (?)`;
         var queryPrestamosSocios = await query(queryPrestamos,req.params.idSocio);
         if(queryPrestamosSocios.length <= 0){
             console.log("No se encontraron libros prestado al socio");
             res.status(404).json("No se encontraron libros prestado al socio");
         }
         else{
+            for(p of queryPrestamosSocios){
+                p.fecha_vto = (new Date(p.fecha_vto)).toLocaleDateString('eu-ES');
+            }
             res.status(200).json(queryPrestamosSocios);
         }
     }
@@ -391,12 +398,19 @@ app.post('/prestamos', async function(req, res){
 
 app.get('/prestamos_vencidos', auth, async function (req, res) {
     var fechaMiliseg = (new Date()).getTime();
-    const queryPrestamos = `select * from prestamos where fecha_vto < ?`;
+    const queryPrestamos = `select id_prestamo, libros.id_libro, prestamos.id_socio, libros.titulo, usuarios.nombre as nombre_socio, fecha_vto
+                                from prestamos join usuarios join libros 
+                                where prestamos.id_socio = usuarios.id && 
+                                    prestamos.id_libro = libros.id_libro && 
+                                    fecha_vto < ?`;
     var queryPrestamosGeneral = await query(queryPrestamos, [fechaMiliseg]);
     if (queryPrestamosGeneral.length <= 0) {
         console.log("No hay prestamos vencidos");
         res.status(400).json("No hay prestamos vencidos");
     } else {
+        for(p of queryPrestamosGeneral){
+            p.fecha_vto = (new Date(p.fecha_vto)).toLocaleDateString('eu-ES');
+        }
         res.status(200).json(queryPrestamosGeneral);
     }
 })

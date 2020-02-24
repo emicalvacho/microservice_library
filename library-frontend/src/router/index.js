@@ -7,23 +7,39 @@ const routes = [
   {
     path: '/',
     name: 'login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/signup',
     name: 'signup',
-    component: () => import(/* webpackChunkName: "about" */ '../views/SignUp.vue')
+    component: () => import('../views/SingUp.vue')
   },
   {
     path: '/home',
     name: 'home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/UserHome.vue')
+    component: () => import('../views/UserHome.vue')
+  },
+  {
+    path: '/books',
+    name: 'books',
+    component: () => import('../views/AdminBooks.vue')
+  },
+  {
+    path: '/loans',
+    name: 'loans',
+    component: () => import('../views/AdminLoans.vue')
+  },
+  {
+    path: '/partners',
+    name: 'partners',
+    component: () => import('../views/AdminPartners.vue')
   },
   {
     path: '/home_admin',
     name: 'home_admin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AdminHome.vue')
-  },
+    component: () => import('../views/AdminHome.vue')
+  }
+
 ]
 
 const router = new VueRouter({

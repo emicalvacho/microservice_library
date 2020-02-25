@@ -32,3 +32,10 @@ create table prestamos(
     CONSTRAINT  FK__prestamos__usuarios__END
         FOREIGN KEY (id_socio) REFERENCES usuarios(id)
 );
+
+insert into usuarios (id,nombre,username,pass,rol) values (1,"Bibliotecario","admin","admin","b");   
+
+insert into libros (id_libro, titulo, cantidad) 
+values 	("abx32fper", "La crisis del chaco"	,   5),
+	("pkq3ls1cz", "La noche del peru"	,   3),
+	("ru8psv31a", "El caso del petizo Juan"	,   6);

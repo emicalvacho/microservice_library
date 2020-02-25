@@ -1,23 +1,30 @@
 version: '3.3'
 services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command: node ./app.js
+    environment:
+      WAIT_HOSTS: db:3306
   db:
     image: mysql:5.7
     volumes:
-      - db1:/var/lib/mysql
+      - db:/var/lib/mysql
       - type: bind
         source: ./init.sql
         target: /docker-entrypoint-initdb.d/init.sql
     environment:
-      MYSQL_DATABASE: 'jose-emi'
+      MYSQL_DATABASE: 'library'
       # So you don't have to use root, but you can if you like
-      MYSQL_USER: 'user'
+      MYSQL_USER: 'lab4'
       # You can use whatever password you like
-      MYSQL_PASSWORD: 'password'
+      MYSQL_PASSWORD: 'laboratorio4'
       # Password for root access
-      MYSQL_ROOT_PASSWORD: 'password'
-    ports:
-        - "3306:3306"
+      MYSQL_ROOT_PASSWORD: 'laboratorio4'
 
 # Names our volume
 volumes:
-  db1: 
+  db: 

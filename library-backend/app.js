@@ -20,7 +20,7 @@ app.use(cors({
 }));
 
 var con = mysql.createConnection({
-    host: "localhost",
+    host: "db",
     user: "lab4",
     password: "laboratorio4",
     database: "library"
@@ -430,7 +430,7 @@ function obtenerFechaVto(dias) {
     return fecVto;
 }
 
-var server = app.listen(8080, '127.0.0.1', function () {
+var server = app.listen(8080, '0.0.0.0', function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("Example app listening at http://%s:%s", host, port);

@@ -1,5 +1,7 @@
 <template>
-    <v-container style="height: 100%" grid-list-md>
+<div>
+    <NavBar></NavBar>
+    <v-container grid-list-md>
         <TabNav></TabNav>
         <v-spacer></v-spacer>
         <v-card height="500" color="#42a5f5">
@@ -15,6 +17,7 @@
             </v-card-text>
         </v-card> 
     </v-container>
+    </div>
 </template>
 
 <script>

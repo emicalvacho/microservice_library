@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-tabs color="white" background-color="blue darken-1" dark slider-color="white">
             <v-tab to="home_admin">
                 Home
@@ -13,4 +14,5 @@
                 Socios
             </v-tab>
     </v-tabs>
+    </div>
 </template>

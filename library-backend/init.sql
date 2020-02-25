@@ -1,3 +1,5 @@
+USE library;
+
 create table libros(
     id_libro    VARCHAR(10)     not NULL,
     titulo      VARCHAR(255)    not NULL,
@@ -7,6 +9,7 @@ create table libros(
     CONSTRAINT CK__libros__cantidad__END 
         CHECK(cantidad>0)
 );
+
 
 create table usuarios(
     id          VARCHAR(10)         not NULL,
@@ -20,6 +23,8 @@ create table usuarios(
         CHECK(rol='s' or rol='b' or rol='S' or rol='B')
 );
 
+insert into usuarios (id, nombre, username, pass, rol) values ("e39aab2la", "Cristobal", "admin", "cris", "b");
+
 create table prestamos(
     id_prestamo VARCHAR(10)         not NULL,
     id_libro    VARCHAR(10)         not NULL,
@@ -32,10 +37,3 @@ create table prestamos(
     CONSTRAINT  FK__prestamos__usuarios__END
         FOREIGN KEY (id_socio) REFERENCES usuarios(id)
 );
-
-insert into usuarios (id,nombre,username,pass,rol) values (1,"Bibliotecario","admin","admin","b");   
-
-insert into libros (id_libro, titulo, cantidad) 
-values 	("abx32fper", "La crisis del chaco"	,   5),
-	("pkq3ls1cz", "La noche del peru"	,   3),
-	("ru8psv31a", "El caso del petizo Juan"	,   6);

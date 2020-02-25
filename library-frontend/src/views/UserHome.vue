@@ -1,123 +1,125 @@
 <template>
   <div class="imagen">
-    <NavBar></NavBar>
+    <v-app>
+      <NavBar></NavBar>
 
-    <v-container grid-list-md>
-      <v-snackbar v-model="snackbar" :timeout="timeout" top color="error">
-        {{ messageResponse }}
-        <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
-      </v-snackbar>
+      <v-container grid-list-md>
+        <v-snackbar v-model="snackbar" :timeout="timeout" top color="error">
+          {{ messageResponse }}
+          <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
+        </v-snackbar>
 
-      <v-layout row wrap>
-        <!-- Get all books  -->
-        <v-flex md12 class="margins">
-          <v-card>
-            <v-card-title primary-title class="card font-weight-light">
-              <v-icon color="white" class="margin-icon">fas fa-book</v-icon>Nuestros libros</v-card-title>
-            <v-data-table
-              :headers="listBooks"
-              :items="books"
-              class="elevation-1 mytable"
-              center
-              :no-data-text="notBooks"
-            >
-              <template v-slot:item.cantidad="{ item }">
-                <v-chip :color="getColor(item.cantidad)" dark>
+        <v-layout row wrap>
+          <!-- Get all books  -->
+          <v-flex md12 class="margins">
+            <v-card>
+              <v-card-title primary-title class="card font-weight-light">
+                <v-icon color="white" class="margin-icon">fas fa-book</v-icon>Nuestros libros
+              </v-card-title>
+              <v-data-table
+                :headers="listBooks"
+                :items="allBooks"
+                class="elevation-1 mytable"
+                center
+                :no-data-text="notBooks"
+              >
+                <template v-slot:item.cantidad="{ item }">
+                  <v-chip :color="getColor(item.cantidad)" dark>
+                    {{
+                    item.cantidad
+                    }}
+                  </v-chip>
+                </template>
+              </v-data-table>
+            </v-card>
+          </v-flex>
+
+          <!-- Post loan -->
+          <v-flex class="margins">
+            <v-card class="overflow-hidden" color="blue lighten-1" dark>
+              <v-toolbar flat color="blue">
+                <v-icon class="margin-icon">fas fa-book-reader</v-icon>
+                <v-toolbar-title class="font-weight-light">Realice un préstamo</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-3" fab small @click="isEditing = !isEditing">
+                  <v-icon v-if="!isEditing">mdi-close</v-icon>
+                  <v-icon v-else>mdi-pencil</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-card-text>
+                <!-- Autocomplete combobox to books in post loans-->
+                <v-autocomplete
+                  :disabled="!isEditing"
+                  :items="showTitleBooks"
+                  :filter="customFilter"
+                  color="white"
+                  item-text="name"
+                  label="Libro"
+                  v-model="book"
+                  return-object
+                ></v-autocomplete>
+                <!-- Slider to amount days in post  loans-->
+                <v-slider
+                  :disabled="!isEditing"
+                  v-model="cantidadDias"
+                  :label="slideConfig.label"
+                  :thumb-color="slideConfig.color"
+                  thumb-label="always"
+                  max="30"
+                  min="1"
+                  class="margins"
+                ></v-slider>
+              </v-card-text>
+
+              <v-divider></v-divider>
+
+              <!-- Confirm post loan -->
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn :disabled="!isEditing" color="success" @click="controlLoan">Crear Préstamo</v-btn>
+              </v-card-actions>
+              <v-dialog v-model="confirm" persistent max-width="450">
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{titleConfirm}}</span>
+                  </v-card-title>
+                  <v-card-text>{{aboutConfirm}}</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="confirm = false">Cancelar</v-btn>
+                    <v-btn color="blue darken-1" text @click="actionConfirm">Aceptar</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-card>
+          </v-flex>
+
+          <!-- My loans -->
+          <v-flex md12 class="margins">
+            <v-card>
+              <v-card-title primary-title class="card font-weight-light">
+                <v-icon color="white" class="margin-icon">fas fa-tasks</v-icon>Mis préstamos
+              </v-card-title>
+              <v-data-table
+                :headers="listLoans"
+                :items="myLoans"
+                class="elevation-1 mytable"
+                center
+                :no-data-text="notLoans"
+              >
+                <template v-slot:item.fecha_vto="{ item }">
                   {{
-                  item.cantidad
+                  formatDate(item.fecha_vto)
                   }}
-                </v-chip>
-              </template>
-            </v-data-table>
-          </v-card>
-        </v-flex>
-
-        <!-- Post loan -->
-        <v-flex class="margins">
-          <v-card class="overflow-hidden" color="blue lighten-1" dark>
-            <v-toolbar flat color="blue">
-              <v-icon class="margin-icon">fas fa-book-reader</v-icon>
-              <v-toolbar-title class="font-weight-light">Realice un préstamo</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-3" fab small @click="isEditing = !isEditing">
-                <v-icon v-if="!isEditing">mdi-close</v-icon>
-                <v-icon v-else>mdi-pencil</v-icon>
-              </v-btn>
-            </v-toolbar>
-            <v-card-text>
-              <!-- Autocomplete combobox to books in post loans-->
-              <v-autocomplete
-                :disabled="!isEditing"
-                :items="showTitleBooks"
-                :filter="customFilter"
-                color="white"
-                item-text="name"
-                label="Libro"
-                v-model="book"
-                return-object
-              ></v-autocomplete>
-              <!-- Slider to amount days in post  loans-->
-              <v-slider
-                :disabled="!isEditing"
-                v-model="cantidadDias"
-                :label="slideConfig.label"
-                :thumb-color="slideConfig.color"
-                thumb-label="always"
-                max="30"
-                min="1"
-                class="margins"
-              ></v-slider>
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <!-- Confirm post loan -->
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn :disabled="!isEditing" color="success" @click="controlLoan">Crear Préstamo</v-btn>
-            </v-card-actions>
-            <v-dialog v-model="confirm" persistent max-width="450">
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{titleConfirm}}</span>
-                </v-card-title>
-                <v-card-text>{{aboutConfirm}}</v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="confirm = false">Cancelar</v-btn>
-                  <v-btn color="blue darken-1" text @click="actionConfirm">Aceptar</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-card>
-        </v-flex>
-
-        <!-- My loans -->
-        <v-flex md12 class="margins">
-          <v-card>
-            <v-card-title primary-title class="card font-weight-light">
-               <v-icon color="white" class="margin-icon">fas fa-tasks</v-icon>Mis préstamos</v-card-title>
-            <v-data-table
-              :headers="listLoans"
-              :items="loans"
-              class="elevation-1 mytable"
-              center
-              :no-data-text="notLoans"
-            >
-              <template v-slot:item.fecha_vto="{ item }">
-                {{
-                formatDate(item.fecha_vto)
-                }}
-              </template>
-            </v-data-table>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-    <Footer>
-    </Footer>
+                </template>
+              </v-data-table>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      <Footer></Footer>
+    </v-app>
   </div>
-
 </template>
 
 <script>
@@ -127,8 +129,8 @@ export default {
   data() {
     return {
       //
-      loans: [],
-      books: [],
+      myLoans: [],
+      allBooks: [],
 
       // To show in data-tables with the query format
       listBooks: [
@@ -167,13 +169,13 @@ export default {
     // Queries to the API
     getBooks() {
       this.$axios
-        .get("http://localhost:8080/libros")
+        .get("http://localhost:5555/libros")
         .then(data => {
-          this.books = data.data;
-          for (const i of this.books) {
+          this.allBooks = data.data;
+          for (const i of this.allBooks) {
             this.showTitleBooks.push({ name: i.titulo, id: i.id_libro });
           }
-          console.log(this.books);
+          console.log(this.allBooks);
         })
         .catch(() => {
           this.notBooks = "No hay libros disponibles";
@@ -181,10 +183,10 @@ export default {
     },
     getLoans() {
       this.$axios
-        .get("http://localhost:8080/prestamos")
+        .get("http://localhost:5555/prestamos")
         .then(data => {
-          this.loans = data.data;
-          console.log(this.loans);
+          this.myLoans = data.data;
+          console.log(this.myLoans);
         })
         .catch(() => {
           this.notLoans = "No tienes préstamos";
@@ -192,7 +194,7 @@ export default {
     },
     postLoans() {
       this.$axios
-        .post("http://localhost:8080/prestamos", {
+        .post("http://localhost:5555/prestamos", {
           idLibro: this.book.id,
           cantidadDias: this.cantidadDias
         })
@@ -305,27 +307,27 @@ export default {
 }
 .mytable table tr {
   background-color: #42a5f5;
-  border-bottom: none;  
+  border-bottom: none;
 }
 .mytable table th {
   background-color: #2296f3;
 }
-td.text-start{
+td.text-start {
   color: white;
   font-weight: bold;
 }
-td.text-start:hover{
+td.text-start:hover {
   color: white;
   font-weight: bold;
 }
-tr:hover{
-  background-color: #326fc4!important;
+tr:hover {
+  background-color: #326fc4 !important;
 }
-div.v-card__title.card{
+div.v-card__title.card {
   color: white;
 }
-th.text-start span{
-  color:white;
+th.text-start span {
+  color: white;
 }
 .card {
   border-style: none;
@@ -334,7 +336,7 @@ th.text-start span{
 .v-data-footer {
   background-color: #2296f3;
 }
-.margin-icon{
+.margin-icon {
   margin-right: 7px;
 }
 </style>

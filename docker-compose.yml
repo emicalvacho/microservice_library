@@ -1,33 +1,32 @@
-version: "3.3"
+version: '3.3'
 services:
   api:
     build: ./library-backend
     ports:
-      - "8080:8080"
+      - "5555:5555"
     depends_on:
       - db
     command: node ./app.js
     environment:
       WAIT_HOSTS: db:3306
-
-  frontend:
-    build: ./library-frontend
-    ports:
-      - "8081:8080"
-    command: npm run serve
-
   db:
     image: mysql:5.7
     volumes:
       - db:/var/lib/mysql
       - type: bind
-        source: ./init.sql
+        source: ./library-backend/init.sql
         target: /docker-entrypoint-initdb.d/init.sql
+    restart: always
     environment:
-      MYSQL_DATABASE: "library"
-      MYSQL_USER: "lab4"
-      MYSQL_PASSWORD: "laboratorio4"
-      MYSQL_ROOT_PASSWORD: "laboratorio4"
-
+      MYSQL_DATABASE: 'library'
+      MYSQL_USER: 'lab4'
+      MYSQL_PASSWORD: 'laboratorio4'
+      MYSQL_ROOT_PASSWORD: 'laboratorio4'
+  front:
+    build: ./library-frontend
+    ports:
+      - "8080:8080"
+    command: npm run serve
+      
 volumes:
-  db:
+  db: 

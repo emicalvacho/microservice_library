@@ -14,12 +14,13 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(cors({
-    origin: ['http://localhost:8081'],
+    origin: ['http://localhost:8080'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // enable set cookie
 }));
 
 var con = mysql.createConnection({
+    // host: "localhost",
     host: "db",
     user: "lab4",
     password: "laboratorio4",
@@ -430,7 +431,7 @@ function obtenerFechaVto(dias) {
     return fecVto;
 }
 
-var server = app.listen(8080, '0.0.0.0', function () {
+var server = app.listen(5555, '0.0.0.0', function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("Example app listening at http://%s:%s", host, port);

@@ -15,4 +15,4 @@ RUN chmod +x /wait
 
 CMD /wait && node app.js
 
-EXPOSE 8080
+EXPOSE 5555

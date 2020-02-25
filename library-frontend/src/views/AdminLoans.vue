@@ -1,75 +1,78 @@
 <template>
   <div>
-    <v-container grid-list-md>
-      <TabNav></TabNav>
-      <v-snackbar v-model="snackbar" :timeout="timeout" top color="success">
-        {{ messageResponse }}
-        <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
-      </v-snackbar>
+    <v-app>
+      <v-container grid-list-md>
+        <NavBar></NavBar>
+        <TabNav></TabNav>
+        <v-snackbar v-model="snackbar" :timeout="timeout" top color="success">
+          {{ messageResponse }}
+          <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
+        </v-snackbar>
 
-      <v-data-table
-        :headers="headers"
-        :items="loans"
-        class="elevation-1 mytable"
-        :no-data-text="noDataMessage"
-        :footer-props="{
+        <v-data-table
+          :headers="headers"
+          :items="loans"
+          class="elevation-1 mytable"
+          :no-data-text="noDataMessage"
+          :footer-props="{
                 'items-per-page-options': [],
                 'items-per-page-text': null,
                 'disable-items-per-page': true 
             }"
-      >
-        <template v-slot:top>
-          <v-toolbar flat color="#2296f3">
-            <v-toolbar-title>Préstamos</v-toolbar-title>
+        >
+          <template v-slot:top>
+            <v-toolbar flat color="#2296f3">
+              <v-toolbar-title>Préstamos</v-toolbar-title>
 
-            <v-spacer></v-spacer>
-            <v-col cols="12" md="3" sm="2">
-              <v-select
-                class="mt-4"
-                v-model="defaultSelected"
-                item-color="blue darken-1"
-                color="white"
-                v-on:change="changeSelect"
-                :items="itemsSelect"
-              ></v-select>
-            </v-col>
+              <v-spacer></v-spacer>
+              <v-col cols="12" md="3" sm="2">
+                <v-select
+                  class="mt-4"
+                  v-model="defaultSelected"
+                  item-color="blue darken-1"
+                  color="white"
+                  v-on:change="changeSelect"
+                  :items="itemsSelect"
+                ></v-select>
+              </v-col>
 
-            <v-col cols="12" md="3" sm="2">
-              <v-autocomplete
-                v-model="selectedPartner"
-                class="mt-3"
-                item-color="blue darken-1"
-                color="white"
-                :items="itemsPartners"
-                placeholder="Socio"
-                dense
-                item-text="nombre"
-                v-on:change="changeSelect"
-                clearable
-                return-object
-              ></v-autocomplete>
-            </v-col>
+              <v-col cols="12" md="3" sm="2">
+                <v-autocomplete
+                  v-model="selectedPartner"
+                  class="mt-3"
+                  item-color="blue darken-1"
+                  color="white"
+                  :items="itemsPartners"
+                  placeholder="Socio"
+                  dense
+                  item-text="nombre"
+                  v-on:change="changeSelect"
+                  clearable
+                  return-object
+                ></v-autocomplete>
+              </v-col>
 
-            <v-dialog v-model="confirm" persistent max-width="450">
-              <v-card>
-                <v-card-title>
-                  <span class="headline">Eliminar préstamo</span>
-                </v-card-title>
-                <v-card-text>¿Esta seguro que desea eliminar el préstamo?</v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="confirm = false">Cancelar</v-btn>
-                  <v-btn color="blue darken-1" text @click="deleteLoan(itemDelete)">Aceptar</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <v-icon small @click="setItemDelete(item)">fas fa-trash</v-icon>
-        </template>
-      </v-data-table>
-    </v-container>
+              <v-dialog v-model="confirm" persistent max-width="450">
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">Eliminar préstamo</span>
+                  </v-card-title>
+                  <v-card-text>¿Esta seguro que desea eliminar el préstamo?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="confirm = false">Cancelar</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteLoan(itemDelete)">Aceptar</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <v-icon small @click="setItemDelete(item)">fas fa-trash</v-icon>
+          </template>
+        </v-data-table>
+      </v-container>
+    </v-app>
   </div>
 </template>
 
@@ -112,7 +115,7 @@ export default {
     ...mapActions(["getBooks", "getPartners", "getLoans"]),
     getExpiredLoans() {
       this.$axios
-        .get("http://localhost:8080/prestamos_vencidos")
+        .get("http://localhost:5555/prestamos_vencidos")
         .then(data => {
           this.expiredLoans = data.data;
         })
@@ -122,7 +125,7 @@ export default {
     },
     getLoansUser(idSocio, updatePartner) {
       this.$axios
-        .get("http://localhost:8080/prestamos/" + idSocio)
+        .get("http://localhost:5555/prestamos/" + idSocio)
         .then(data => {
           if (!updatePartner) {
             this.setLoans(data.data);
@@ -147,7 +150,7 @@ export default {
     },
     deleteLoan(item) {
       this.$axios
-        .delete("http://localhost:8080/prestamos/" + item.id_prestamo)
+        .delete("http://localhost:5555/prestamos/" + item.id_prestamo)
         .then(() => {
           let index;
           // let auxExpiredLoans = JSON.parse(JSON.stringify(this.expiredLoans));

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="contenedor-tab">
     <v-tabs color="white" background-color="blue darken-1" dark slider-color="white">
             <v-tab to="home_admin">
                 Home
@@ -16,3 +16,10 @@
     </v-tabs>
     </div>
 </template>
+
+<style scope>
+.contenedor-tab{
+    margin-top: 60px!important;
+}
+</style>
+

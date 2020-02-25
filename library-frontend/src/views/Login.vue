@@ -1,66 +1,72 @@
 <template>
   <div>
-    <v-containter>
-      <v-snackbar v-model="snackbar" :timeout="timeout" top :color="colorSnack">
-        {{ messageResponse }}
-        <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
-      </v-snackbar>
-      <div class="limiter imagen-login">
-        <div class="container-login100">
-          <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" p-l-55>
-            <form class="login100-form validate-form">
-              <span class="login100-form-title p-b-30">Iniciar sesión</span>
+    <v-app>
+      <v-container fluid pa-0>
+        <v-snackbar v-model="snackbar" :timeout="timeout" top :color="colorSnack">
+          {{ messageResponse }}
+          <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
+        </v-snackbar>
+        <div class="limiter imagen-login">
+          <div class="container-login100">
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" p-l-55>
+              <form class="login100-form validate-form">
+                <span class="login100-form-title p-b-30">Iniciar sesión</span>
 
-              <v-text-field
-                box
-                full-width
-                single-line
-                label="Username"
-                color="blue"
-                prepend-inner-icon="mdi-account-outline"
-                mb-0
-                v-model="username"
-                :rules="usernameRules"
-                @keyup.enter="auth"
-                required
-              ></v-text-field>
+                <v-text-field
+                  full-width
+                  single-line
+                  label="Username"
+                  color="blue"
+                  prepend-inner-icon="mdi-account-outline"
+                  mb-0
+                  v-model="username"
+                  :rules="usernameRules"
+                  @keyup.enter="auth"
+                  required
+                ></v-text-field>
 
-              <v-text-field
-                :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-                :type="show1 ? 'text' : 'password'"
-                box
-                full-width
-                single-line
-                label="Contraseña"
-                color="blue"
-                prepend-inner-icon="mdi-lock-outline"
-                @click:append="show1 = !show1"
-                v-model="password"
-                :rules="passwordRules"
-                @keyup.enter="auth"
-                required
-              ></v-text-field>
+                <v-text-field
+                  :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                  :type="show1 ? 'text' : 'password'"
+                  full-width
+                  single-line
+                  label="Contraseña"
+                  color="blue"
+                  prepend-inner-icon="mdi-lock-outline"
+                  @click:append="show1 = !show1"
+                  v-model="password"
+                  :rules="passwordRules"
+                  @keyup.enter="auth"
+                  required
+                ></v-text-field>
 
-              <div class="text-center m-t-20">
-                <v-btn rounded color="success" @click="auth" class="login100-form-btn" dark>Iniciar</v-btn>
-              </div>
-
-              <div class="flex-col-c p-t-50">
-                <p class="ma-1">
-                  ¿Aún no tienes una cuenta?
+                <div class="text-center m-t-20">
                   <v-btn
                     rounded
-                    color="#326fc4"
-                    class="subheading mx-3 white--text"
-                    to="/signup"
-                  >Crear cuenta</v-btn>
-                </p>
-              </div>
-            </form>
+                    color="success"
+                    @click="auth"
+                    class="login100-form-btn"
+                    dark
+                  >Iniciar</v-btn>
+                </div>
+
+                <div class="flex-col-c p-t-50">
+                  <p class="ma-1">
+                    ¿Aún no tienes una cuenta?
+                    <v-btn
+                      rounded
+                      color="#326fc4"
+                      class="subheading mx-3 white--text"
+                      to="/signup"
+                    >Crear cuenta</v-btn>
+                  </p>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </v-containter>
+      </v-container>
+    </v-app>
   </div>
 </template>
 
@@ -77,13 +83,15 @@ export default {
       colorSnack: "",
       snackbar: false,
       messageResponse: "",
-      show1: false
+      show1: false,
+      usernameRules: [v => !!v || "Completar nombre de usuario"],
+      passwordRules: [v => !!v || "Completar la contraseña"]
     };
   },
   methods: {
     auth() {
       this.$axios
-        .post("http://localhost:8080/login", {
+        .post("http://localhost:5555/login", {
           username: this.username,
           password: this.password
         })

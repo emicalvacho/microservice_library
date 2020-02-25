@@ -19,7 +19,7 @@ export default {
   methods: {
     logout() {
       this.$axios
-        .post("http://localhost:8080/logout", {})
+        .post("http://localhost:5555/logout", {})
         .then(data => {
           console.log(data);
           this.$router.push("/");

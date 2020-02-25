@@ -1,107 +1,104 @@
 <template>
   <div>
-    <v-container fluid pa-0 class="contenedor">
-      <v-snackbar v-model="snackbar" :timeout="timeout" top :color="colorSnack">
-        {{ messageResponse }}
-        <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
-      </v-snackbar>
-      <v-layout row wrap class="capa-envolvente">
-        <v-flex xs12 sm4 id="sign-in-text-wrapper">
-          <v-layout column align-center justify-center fill-height pa-3>
-            <div class="login-wrapper text-xs-center mb-3">
-              <div class="display-1 font-weight-black mb-3">Vamos a leer algo!</div>
-              <span class="subheading"></span>
-            </div>
-            <v-btn
-              rounded
-              outline
-              large
-              dark
-              ripple
-              id="sign-in"
-              @click="sendLogin"
-              class="subheading mx-3 white--text"
-            >Iniciar sesión</v-btn>
-          </v-layout>
-        </v-flex>
-        <v-flex xs12 sm8 id="sign-up-envoltorio" class="active">
-          <v-layout column align-center justify-center pa-3 mt-5>
-            <v-flex xs12 mb-3 mt-5>
-              <div class="login-wrapper text-xs-center">
-                <div class="display-1 font-weight-black">Crear cuenta</div>
+    <v-app>
+      <v-container fluid pa-0 class="contenedor">
+        <v-snackbar v-model="snackbar" :timeout="timeout" top :color="colorSnack">
+          {{ messageResponse }}
+          <v-icon color="white" text @click="snackbar = false">fas fa-times-circle</v-icon>
+        </v-snackbar>
+        <v-layout row wrap class="capa-envolvente">
+          <v-flex xs12 sm4 id="sign-in-text-wrapper">
+            <v-layout column align-center justify-center fill-height pa-3>
+              <div class="login-wrapper text-xs-center mb-3">
+                <div class="display-1 font-weight-black mb-3">Vamos a leer algo!</div>
+                <span class="subheading"></span>
               </div>
-            </v-flex>
-
-            <v-flex xs12>
-              <v-form ref="form">
-                <v-text-field
-                  box
-                  full-width
-                  single-line
-                  label="Nombre"
-                  color="blue"
-                  prepend-inner-icon="mdi-account-box"
-                  v-model="name"
-                  :rules="nameRules"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  box
-                  full-width
-                  single-line
-                  label="Username"
-                  color="blue"
-                  prepend-inner-icon="mdi-account-outline"
-                  v-model="username"
-                  :rules="usernameRules"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-                  :type="show1 ? 'text' : 'password'"
-                  box
-                  full-width
-                  single-line
-                  label="Contraseña"
-                  color="blue"
-                  prepend-inner-icon="mdi-lock-outline"
-                  @click:append="show1 = !show1"
-                  v-model="password"
-                  :rules="passwordRules"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  :append-icon="show2 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-                  :type="show2 ? 'text' : 'password'"
-                  box
-                  full-width
-                  single-line
-                  label="Confirmar contraseña"
-                  color="blue"
-                  prepend-inner-icon="mdi-lock-outline"
-                  @click:append="show2 = !show2"
-                  v-model="confirmPassword"
-                  :rules="confirmRules"
-                  required
-                ></v-text-field>
-              </v-form>
-            </v-flex>
-            <div class="mt-5">
               <v-btn
                 rounded
                 large
                 dark
                 ripple
-                color="#326fc4"
-                id="sign-up"
-                @click="sendUser"
-                height="50"
-              >Registrarse</v-btn>
-            </div>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-container>
+                id="sign-in"
+                @click="sendLogin"
+                class="subheading mx-3 white--text"
+              >Iniciar sesión</v-btn>
+            </v-layout>
+          </v-flex>
+          <v-flex xs12 sm8 id="sign-up-envoltorio" class="active">
+            <v-layout column align-center justify-center pa-3 mt-5>
+              <v-flex xs12 mb-3 mt-5>
+                <div class="login-wrapper text-xs-center">
+                  <div class="display-1 font-weight-black">Crear cuenta</div>
+                </div>
+              </v-flex>
+
+              <v-flex xs12>
+                <v-form ref="form">
+                  <v-text-field
+                    full-width
+                    single-line
+                    label="Nombre"
+                    color="blue"
+                    prepend-inner-icon="mdi-account-box"
+                    v-model="name"
+                    :rules="nameRules"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    full-width
+                    single-line
+                    label="Username"
+                    color="blue"
+                    prepend-inner-icon="mdi-account-outline"
+                    v-model="username"
+                    :rules="usernameRules"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                    :type="show1 ? 'text' : 'password'"
+                    full-width
+                    single-line
+                    label="Contraseña"
+                    color="blue"
+                    prepend-inner-icon="mdi-lock-outline"
+                    @click:append="show1 = !show1"
+                    v-model="password"
+                    :rules="passwordRules"
+                    required
+                  ></v-text-field>
+                  <v-text-field
+                    :append-icon="show2 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                    :type="show2 ? 'text' : 'password'"
+                    full-width
+                    single-line
+                    label="Confirmar contraseña"
+                    color="blue"
+                    prepend-inner-icon="mdi-lock-outline"
+                    @click:append="show2 = !show2"
+                    v-model="confirmPassword"
+                    :rules="confirmRules"
+                    required
+                  ></v-text-field>
+                </v-form>
+              </v-flex>
+              <div class="mt-5">
+                <v-btn
+                  rounded
+                  large
+                  dark
+                  ripple
+                  color="#326fc4"
+                  id="sign-up"
+                  @click="sendUser"
+                  height="50"
+                >Registrarse</v-btn>
+              </div>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-app>
   </div>
 </template>
 
@@ -142,7 +139,7 @@ export default {
     sendUser() {
       if (this.$refs.form.validate()) {
         this.$axios
-          .post("http://localhost:8080/usuarios", {
+          .post("http://localhost:5555/usuarios", {
             nombre: this.name,
             username: this.username,
             password: this.password,

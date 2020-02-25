@@ -35,7 +35,7 @@ export default new Vuex.Store({
      la operacion y se la envia a la mutacion para que efectue el cambio */
   actions: {
     getPartners(context) {
-      axios.get('http://localhost:8080/usuarios')
+      axios.get('http://localhost:5555/usuarios')
         .then(data => {
           context.commit('setPartners', data.data);
         })
@@ -44,7 +44,7 @@ export default new Vuex.Store({
         })
     },
     getBooks(context) {
-      axios.get('http://localhost:8080/libros')
+      axios.get('http://localhost:5555/libros')
         .then(data => {
           context.commit('setBooks', data.data);
         })
@@ -54,7 +54,7 @@ export default new Vuex.Store({
     },
     // cada vez que se modifica un prestamo eliminacion modificacion, se lanza esta accion para actualizar los datos de la store
     getLoans(context) {
-      axios.get('http://localhost:8080/prestamos')
+      axios.get('http://localhost:5555/prestamos')
         .then(data => {
           context.commit('setLoans', data.data);
         })
@@ -63,7 +63,7 @@ export default new Vuex.Store({
         })
     },
     getName(context) {
-      axios.post('http://localhost:8080/login')
+      axios.post('http://localhost:5555/login')
         .then(data => {
           context.commit('setName', data.data.username);
         })

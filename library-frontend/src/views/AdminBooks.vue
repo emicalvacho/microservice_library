@@ -241,13 +241,10 @@ export default {
       this.$axios
         .delete("http://localhost:5555/libros/" + idLibro)
         .then(() => {
-          console.log((this.books).length);
           if((this.books).length == 1){
               this.setBooks([]);
-              console.log("aqui");
           }else {
               this.getBooks();
-              console.log("aculla");
           }
           this.messageResponse = "Libro eliminado correctamente";
           this.snackbar = true;

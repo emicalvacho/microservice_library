@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   // el id del prestamo lo obtengo del datatable
   data() {
@@ -167,6 +167,7 @@ export default {
 
   methods: {
     ...mapActions(["getBooks"]),
+    ...mapMutations(["setBooks"]),
     // setear la info del libro que se quiere eliminar y activa el dialog para confirmar operacion
     setItemDelete(item) {
       this.itemDelete = item;
@@ -240,7 +241,14 @@ export default {
       this.$axios
         .delete("http://localhost:5555/libros/" + idLibro)
         .then(() => {
-          this.getBooks();
+          console.log((this.books).length);
+          if((this.books).length == 1){
+              this.setBooks([]);
+              console.log("aqui");
+          }else {
+              this.getBooks();
+              console.log("aculla");
+          }
           this.messageResponse = "Libro eliminado correctamente";
           this.snackbar = true;
           this.color = "success";
